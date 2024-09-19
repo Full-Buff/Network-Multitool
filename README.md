@@ -1,2 +1,4 @@
 # Network-Multitool
-Runs multiple network tests automatically when given a hostname.
+
+## Copy this command into a Powershell window to run portably
+``` irm util.fullbuff.gg/nettest | iex ```
