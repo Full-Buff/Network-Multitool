@@ -31,9 +31,10 @@ $descriptionLabel.Font = New-Object System.Drawing.Font("Arial", 12)
 $descriptionLabel.TextAlign = [System.Drawing.ContentAlignment]::MiddleCenter # Centered text alignment
 $form.Controls.Add($descriptionLabel)
 
-# Input box for server IP/Hostname
+# Input box for server IP/Hostname with placeholder
 $inputBox = New-Object System.Windows.Forms.TextBox
 $inputBox.Size = New-Object System.Drawing.Size(700, 25) # Width for input area
+$inputBox.PlaceholderText = "Enter server IP or hostname here..." # Placeholder text (available in .NET Core/Framework 4.7.2+)
 $form.Controls.Add($inputBox)
 
 # Run button
@@ -78,6 +79,9 @@ $form.Add_Shown({
     
     Center-Control $exportButton $form
     $exportButton.Top = 880 # Adjusted to give more bottom padding
+
+    # Set the initial focus to the form itself to avoid focusing the input box on startup
+    $form.Select()
 })
 
 # Function to update results box
@@ -124,7 +128,7 @@ $exportButton.Add_Click({
 # Button action for running tests
 $runButton.Add_Click({
     $address = $inputBox.Text
-    if ([string]::IsNullOrEmpty($address)) {
+    if ([string]::IsNullOrEmpty($address) -or $address -eq "Enter server IP or hostname") {
         [System.Windows.Forms.MessageBox]::Show("Please enter a valid server IP or hostname.")
         return
     }
