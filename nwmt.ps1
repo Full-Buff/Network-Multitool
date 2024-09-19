@@ -5,8 +5,8 @@ Add-Type -AssemblyName System.Drawing
 # Create the form
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Network Multitool"
-$form.Size = New-Object System.Drawing.Size(900, 1050) # Increased height for more padding at the bottom
-$form.MinimumSize = New-Object System.Drawing.Size(900, 1050) # Increased minimum size
+$form.Size = New-Object System.Drawing.Size(630, 735) # Increased height for more padding at the bottom
+$form.MinimumSize = New-Object System.Drawing.Size(630, 735) # Increased minimum size
 $form.StartPosition = "CenterScreen"
 $form.AutoScaleMode = [System.Windows.Forms.AutoScaleMode]::Font # Automatically scale the form
 
@@ -25,43 +25,42 @@ function Center-Control {
 # Branding area (Title and Description)
 $brandingLabel = New-Object System.Windows.Forms.Label
 $brandingLabel.Text = "Network Multitool"
-$brandingLabel.Font = New-Object System.Drawing.Font("Arial", 18, [System.Drawing.FontStyle]::Bold) # Font size
-$brandingLabel.Size = New-Object System.Drawing.Size(700, 50) # Adjusted size for padding
+$brandingLabel.Font = New-Object System.Drawing.Font("Arial", 12, [System.Drawing.FontStyle]::Bold) # Font size
+$brandingLabel.Size = New-Object System.Drawing.Size(489, 35) # Adjusted size for padding
 $brandingLabel.TextAlign = [System.Drawing.ContentAlignment]::MiddleCenter # Centered text alignment
 $form.Controls.Add($brandingLabel)
 
 $descriptionLabel = New-Object System.Windows.Forms.Label
 $descriptionLabel.Text = "Enter the server IP/Hostname to run tests on."
 $descriptionLabel.AutoSize = $true
-$descriptionLabel.Font = New-Object System.Drawing.Font("Arial", 12)
+$descriptionLabel.Font = New-Object System.Drawing.Font("Arial", 8)
 $descriptionLabel.TextAlign = [System.Drawing.ContentAlignment]::MiddleCenter # Centered text alignment
 $form.Controls.Add($descriptionLabel)
 
-# Input box for server IP/Hostname with placeholder
+# Input box for server IP/Hostname
 $inputBox = New-Object System.Windows.Forms.TextBox
-$inputBox.Size = New-Object System.Drawing.Size(700, 25) # Width for input area
-$inputBox.PlaceholderText = "Enter server IP or hostname here..." # Placeholder text (available in .NET Core/Framework 4.7.2+)
+$inputBox.Size = New-Object System.Drawing.Size(489, 17) # Width for input area
 $form.Controls.Add($inputBox)
 
 # Run button
 $runButton = New-Object System.Windows.Forms.Button
 $runButton.Text = "Run Tests"
-$runButton.Size = New-Object System.Drawing.Size(180, 50) # Button size
-$runButton.Font = New-Object System.Drawing.Font("Arial", 12, [System.Drawing.FontStyle]::Bold) # Button font and style
+$runButton.Size = New-Object System.Drawing.Size(125, 35) # Button size
+$runButton.Font = New-Object System.Drawing.Font("Arial", 8, [System.Drawing.FontStyle]::Bold) # Button font and style
 $form.Controls.Add($runButton)
 
 # Text box to show results
 $resultsBox = New-Object System.Windows.Forms.TextBox
 $resultsBox.Multiline = $true
 $resultsBox.ScrollBars = "Vertical"
-$resultsBox.Size = New-Object System.Drawing.Size(800, 600) # Size of the results box
+$resultsBox.Size = New-Object System.Drawing.Size(560, 420) # Size of the results box
 $form.Controls.Add($resultsBox)
 
 # Export button (initially hidden, only shown after the tests)
 $exportButton = New-Object System.Windows.Forms.Button
 $exportButton.Text = "Export Results"
-$exportButton.Size = New-Object System.Drawing.Size(300, 50) # Made the button longer to ensure text fits
-$exportButton.Font = New-Object System.Drawing.Font("Arial", 12, [System.Drawing.FontStyle]::Bold) # Button font and style
+$exportButton.Size = New-Object System.Drawing.Size(210, 35) # Made the button longer to ensure text fits
+$exportButton.Font = New-Object System.Drawing.Font("Arial", 8, [System.Drawing.FontStyle]::Bold) # Button font and style
 $exportButton.Visible = $false
 $form.Controls.Add($exportButton)
 
@@ -69,22 +68,22 @@ $form.Controls.Add($exportButton)
 $form.Add_Shown({
     # Centering elements on the form
     Center-Control $brandingLabel $form
-    $brandingLabel.Top = 30
+    $brandingLabel.Top = 21
     
     Center-Control $descriptionLabel $form
-    $descriptionLabel.Top = 100
+    $descriptionLabel.Top = 70
     
     Center-Control $inputBox $form
-    $inputBox.Top = 140
+    $inputBox.Top = 98
     
     Center-Control $runButton $form
-    $runButton.Top = 190
+    $runButton.Top = 133
     
     Center-Control $resultsBox $form
-    $resultsBox.Top = 260
+    $resultsBox.Top = 182
     
     Center-Control $exportButton $form
-    $exportButton.Top = 880 # Adjusted to give more bottom padding
+    $exportButton.Top = 616 # Adjusted to give more bottom padding
 
     # Set the initial focus to the form itself to avoid focusing the input box on startup
     $form.Select()
