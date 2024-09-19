@@ -4,51 +4,81 @@ Add-Type -AssemblyName System.Drawing
 
 # Create the form
 $form = New-Object System.Windows.Forms.Form
-$form.Text = "Network Diagnostic Tool"
-$form.Size = New-Object System.Drawing.Size(500, 600)
+$form.Text = "Network Multitool"
+$form.Size = New-Object System.Drawing.Size(900, 1050) # Increased height for more padding at the bottom
+$form.MinimumSize = New-Object System.Drawing.Size(900, 1050) # Increased minimum size
 $form.StartPosition = "CenterScreen"
+$form.AutoScaleMode = [System.Windows.Forms.AutoScaleMode]::Font # Automatically scale the form
+
+# Function to center elements horizontally
+function Center-Control {
+    param ($control, $form)
+    $control.Left = [math]::Round(($form.ClientSize.Width - $control.Width) / 2)
+}
 
 # Branding area (Title and Description)
 $brandingLabel = New-Object System.Windows.Forms.Label
-$brandingLabel.Text = "Network Diagnostics"
-$brandingLabel.Font = New-Object System.Drawing.Font("Arial", 14,[System.Drawing.FontStyle]::Bold)
-$brandingLabel.Size = New-Object System.Drawing.Size(300, 40)
-$brandingLabel.Location = New-Object System.Drawing.Point(100, 10)
+$brandingLabel.Text = "Network Multitool"
+$brandingLabel.Font = New-Object System.Drawing.Font("Arial", 18, [System.Drawing.FontStyle]::Bold) # Font size
+$brandingLabel.Size = New-Object System.Drawing.Size(700, 50) # Adjusted size for padding
+$brandingLabel.TextAlign = [System.Drawing.ContentAlignment]::MiddleCenter # Centered text alignment
 $form.Controls.Add($brandingLabel)
 
 $descriptionLabel = New-Object System.Windows.Forms.Label
-$descriptionLabel.Text = "Enter the server IP/Hostname to run diagnostics on."
+$descriptionLabel.Text = "Enter the server IP/Hostname to run tests on."
 $descriptionLabel.AutoSize = $true
-$descriptionLabel.Location = New-Object System.Drawing.Point(100, 50)
+$descriptionLabel.Font = New-Object System.Drawing.Font("Arial", 12)
+$descriptionLabel.TextAlign = [System.Drawing.ContentAlignment]::MiddleCenter # Centered text alignment
 $form.Controls.Add($descriptionLabel)
 
 # Input box for server IP/Hostname
 $inputBox = New-Object System.Windows.Forms.TextBox
-$inputBox.Location = New-Object System.Drawing.Point(100, 80)
-$inputBox.Size = New-Object System.Drawing.Size(250, 20)
+$inputBox.Size = New-Object System.Drawing.Size(700, 25) # Width for input area
 $form.Controls.Add($inputBox)
+
+# Run button
+$runButton = New-Object System.Windows.Forms.Button
+$runButton.Text = "Run Tests"
+$runButton.Size = New-Object System.Drawing.Size(180, 50) # Button size
+$runButton.Font = New-Object System.Drawing.Font("Arial", 12, [System.Drawing.FontStyle]::Bold) # Button font and style
+$form.Controls.Add($runButton)
 
 # Text box to show results
 $resultsBox = New-Object System.Windows.Forms.TextBox
 $resultsBox.Multiline = $true
 $resultsBox.ScrollBars = "Vertical"
-$resultsBox.Location = New-Object System.Drawing.Point(50, 150)
-$resultsBox.Size = New-Object System.Drawing.Size(400, 300)
+$resultsBox.Size = New-Object System.Drawing.Size(800, 600) # Size of the results box
 $form.Controls.Add($resultsBox)
 
 # Export button (initially hidden, only shown after the tests)
 $exportButton = New-Object System.Windows.Forms.Button
-$exportButton.Text = "Export to HTML"
-$exportButton.Location = New-Object System.Drawing.Point(200, 460)
-$exportButton.Size = New-Object System.Drawing.Size(100, 30)
+$exportButton.Text = "Export Results"
+$exportButton.Size = New-Object System.Drawing.Size(300, 50) # Made the button longer to ensure text fits
+$exportButton.Font = New-Object System.Drawing.Font("Arial", 12, [System.Drawing.FontStyle]::Bold) # Button font and style
 $exportButton.Visible = $false
 $form.Controls.Add($exportButton)
 
-# Run button
-$runButton = New-Object System.Windows.Forms.Button
-$runButton.Text = "Run Diagnostics"
-$runButton.Location = New-Object System.Drawing.Point(200, 110)
-$form.Controls.Add($runButton)
+# Set up layout and control positions
+$form.Add_Shown({
+    # Centering elements on the form
+    Center-Control $brandingLabel $form
+    $brandingLabel.Top = 30
+    
+    Center-Control $descriptionLabel $form
+    $descriptionLabel.Top = 100
+    
+    Center-Control $inputBox $form
+    $inputBox.Top = 140
+    
+    Center-Control $runButton $form
+    $runButton.Top = 190
+    
+    Center-Control $resultsBox $form
+    $resultsBox.Top = 260
+    
+    Center-Control $exportButton $form
+    $exportButton.Top = 880 # Adjusted to give more bottom padding
+})
 
 # Function to update results box
 function Append-Results {
@@ -85,7 +115,7 @@ $exportButton.Add_Click({
     $saveFileDialog = New-Object System.Windows.Forms.SaveFileDialog
     $saveFileDialog.Filter = "HTML File (*.html)|*.html"
     if ($saveFileDialog.ShowDialog() -eq "OK") {
-        $htmlContent = "<html><body><h1>Network Diagnostic Results</h1><pre>" + ($resultsBox.Text) + "</pre></body></html>"
+        $htmlContent = "<html><body><h1>Network Multitool Results</h1><pre>" + ($resultsBox.Text) + "</pre></body></html>"
         [System.IO.File]::WriteAllText($saveFileDialog.FileName, $htmlContent)
         [System.Windows.Forms.MessageBox]::Show("Results exported successfully to " + $saveFileDialog.FileName)
     }
