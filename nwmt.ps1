@@ -10,6 +10,12 @@ $form.MinimumSize = New-Object System.Drawing.Size(900, 1050) # Increased minimu
 $form.StartPosition = "CenterScreen"
 $form.AutoScaleMode = [System.Windows.Forms.AutoScaleMode]::Font # Automatically scale the form
 
+# Set custom logo icon by downloading it to a temporary location and then loading it
+$iconUrl = "https://mirror.fullbuff.gg/resources/fullbuff.ico"
+$iconFilePath = "$env:TEMP\\fullbuff.ico"
+(New-Object System.Net.WebClient).DownloadFile($iconUrl, $iconFilePath)
+$form.Icon = [System.Drawing.Icon]::ExtractAssociatedIcon($iconFilePath)
+
 # Function to center elements horizontally
 function Center-Control {
     param ($control, $form)
@@ -138,6 +144,13 @@ $runButton.Add_Click({
 
     # Run the network tests
     Run-NetworkTests -address $address
+})
+
+# Cleanup: Delete the icon file when the form is closed
+$form.Add_FormClosed({
+    if (Test-Path $iconFilePath) {
+        Remove-Item $iconFilePath
+    }
 })
 
 # Show the form
